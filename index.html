@@ -5,32 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Agendamento Premium - Barbeiro Dom Valdenon</title>
 <style>
-body {
-  font-family: Arial, sans-serif;
-  margin:0;
-  background:#121212;
-  color:#fff;
-  display:flex;
-  justify-content:center;
-  align-items:flex-start;
-  min-height:100vh;
-}
-.container {
-  max-width:480px;
-  width:100%;
-  margin:20px;
-  background:#1e1e1e;
-  padding:20px 25px;
-  border-radius:20px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.7);
-}
+body { font-family: Arial, sans-serif; margin:0; background:#121212; color:#fff; display:flex; justify-content:center; align-items:flex-start; min-height:100vh; }
+.container { max-width:480px; width:100%; margin:20px; background:#1e1e1e; padding:20px 25px; border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,0.7); }
 header { text-align:center; margin-bottom:10px; }
-header .logo-wrapper { display:inline-block; border-radius:50%; overflow:hidden; width:90px; height:90px; box-shadow:0 5px 15px rgba(0,0,0,0.5); margin-bottom:8px; }
-header img.logo { width:100%; height:100%; object-fit:cover; }
-header h1 { margin:0; font-size:24px; color:#FFD700; letter-spacing:1px; }
+.logo-wrapper { display:inline-block; border-radius:50%; overflow:hidden; width:90px; height:90px; box-shadow:0 5px 15px rgba(0,0,0,0.5); margin-bottom:8px; }
+.logo { width:100%; height:100%; object-fit:cover; }
+h1 { margin:0; font-size:24px; color:#FFD700; letter-spacing:1px; }
 
 /* Instagram fixo */
-#instagram-fixed { display:block; text-align:center; margin:8px 0 12px 0; text-decoration:none; color:#fff; font-weight:bold; transition:.3s; font-size:14px; }
+#instagram-fixed { display:block; text-align:center; margin:8px 0 12px 0; text-decoration:none; color:#fff; font-weight:bold; font-size:14px; }
 #instagram-fixed img { width:20px; height:20px; vertical-align:middle; margin-right:6px; }
 #instagram-fixed:hover { color:#FFD700; }
 #instagram-fixed:hover img { transform:scale(1.1); }
@@ -40,26 +23,22 @@ label { display:block; margin-top:10px; font-weight:bold; font-size:14px; }
 input, select, button { width:100%; padding:10px; margin-top:4px; border-radius:8px; border:none; font-size:14px; box-sizing:border-box; }
 select, input { background:#2a2a2a; color:#fff; }
 select option:hover { background:#FFD700; color:#000; }
-
-/* Botão agendar */
 button { background:#FFD700; color:#000; font-weight:bold; cursor:pointer; margin-top:8px; transition:.3s; }
 button:hover { background:#e6c200; transform:scale(1.02); }
 
 /* Mensagens */
-.success, .error, #espera { padding:12px; margin-top:12px; border-radius:8px; text-align:center; display:none; font-weight:bold; transition:.3s; font-size:14px; }
+.success, .error, #espera { padding:12px; margin-top:12px; border-radius:8px; text-align:center; display:none; font-weight:bold; font-size:14px; transition:.3s; }
 .success { background:#28a745; }
 .error { background:#dc3545; }
 #espera { background:#ffc107; color:#000; }
 
 #servico-info { margin-top:3px; font-size:12px; color:#FFD700; font-weight:bold; }
-
-/* WhatsApp */
-#whatsapp-link { display:block; text-align:center; margin-top:8px; text-decoration:none; color:#fff; font-weight:bold; transition:.3s; font-size:14px; }
+#whatsapp-link { display:block; text-align:center; margin-top:8px; text-decoration:none; color:#fff; font-weight:bold; font-size:14px; }
 #whatsapp-link img { width:20px; height:20px; vertical-align:middle; margin-right:6px; }
 #whatsapp-link:hover { color:#25D366; }
 #whatsapp-link:hover img { transform:scale(1.1); }
 
-/* Animação do próximo horário */
+/* Próximo horário piscando */
 @keyframes piscar { 0%,100%{color:#FFD700;} 50%{color:#fff;} }
 .piscar { animation: piscar 1s infinite; }
 
@@ -138,49 +117,47 @@ const servicoInfo = document.getElementById("servico-info");
 const whatsappLink = document.getElementById("whatsapp-link");
 const espera = document.getElementById("espera");
 
-// Atualiza horários com próximo horário piscando e ocupados cinza
+// Bloqueia datas passadas
+const hoje = new Date();
+dataInput.min = hoje.toISOString().split('T')[0];
+
+// Atualiza horários
 async function atualizarHorarios(){
   horaSelect.innerHTML = "<option value=''>Selecione um horário</option>";
   if(!dataInput.value || !servico.value) return;
   const duracao = parseInt(servico.selectedOptions[0].dataset.duracao);
   const start = 9*60, end = 20*60+30;
   const now = new Date();
-  const today = dataInput.value === now.toISOString().split('T')[0];
+  const isHoje = dataInput.value === now.toISOString().split('T')[0];
+
   let horarios = [];
   for(let t=start; t<=end-duracao; t+=10){
     if(t>=12*60 && t<13*60) continue;
     const h=Math.floor(t/60).toString().padStart(2,'0');
     const m=(t%60).toString().padStart(2,'0');
-    if(today && (parseInt(h)<now.getHours() || (parseInt(h)==now.getHours() && parseInt(m)<=now.getMinutes()))) continue;
+    if(isHoje && (parseInt(h)<now.getHours() || (parseInt(h)==now.getHours() && parseInt(m)<=now.getMinutes()))) continue;
     horarios.push(`${h}:${m}`);
   }
+
   try{
     const res = await fetch(SHEET_URL+"?action=getHorarios");
-    const ocupados = await res.json();
-    let proximoDisponivel = horarios.find(h => !ocupados[dataInput.value]?.includes(h));
-    horarios.forEach(h=>{
+    const ocupadosDia = (await res.json())[dataInput.value] || [];
+    const proximoDisponivel = horarios.find(h => !ocupadosDia.includes(h));
+    horarios.forEach(h => {
       const opt = document.createElement("option");
       opt.value = h;
       opt.textContent = h;
-      if(ocupados[dataInput.value]?.includes(h)){
-        opt.disabled = true;
-        opt.style.color = "#555";
-      }
-      if(h === proximoDisponivel){
-        opt.classList.add("piscar");
-        opt.textContent = h + " (Próximo disponível)";
-      }
+      if(ocupadosDia.includes(h)){ opt.disabled = true; opt.style.color="#555"; }
+      if(h === proximoDisponivel){ opt.classList.add("piscar"); opt.textContent = h + " (Próximo disponível)"; }
       horaSelect.appendChild(opt);
     });
-  }catch{
-    alert("Erro ao buscar horários ocupados.");
-  }
+  }catch{ alert("Erro ao buscar horários."); }
 }
 
 servico.addEventListener("change", () => {
   if(servico.value){
-    const option = servico.selectedOptions[0];
-    servicoInfo.textContent = `Duração: ${option.dataset.duracao} min | Preço: R$${option.dataset.preco}`;
+    const op = servico.selectedOptions[0];
+    servicoInfo.textContent = `Duração: ${op.dataset.duracao} min | Preço: R$${op.dataset.preco}`;
   }else{ servicoInfo.textContent=''; }
   atualizarHorarios();
 });
@@ -189,19 +166,19 @@ dataInput.addEventListener("change", atualizarHorarios);
 form.addEventListener("submit", async e=>{
   e.preventDefault();
   if(!horaSelect.value){ errorMsg.textContent="Selecione um horário!"; errorMsg.style.display="block"; return; }
-  espera.style.display = "block"; // emoji de espera
-  const dados={ servico: servico.value, data: dataInput.value, hora:horaSelect.value, nome:nomeInput.value, telefone:telInput.value };
+  espera.style.display="block";
+  const dados = { servico:servico.value, data:dataInput.value, hora:horaSelect.value, nome:nomeInput.value, telefone:telInput.value };
   try{
     const res = await fetch(SHEET_URL,{method:"POST",body:JSON.stringify(dados)});
     const r = await res.json();
-    espera.style.display = "none"; // remove emoji de espera
+    espera.style.display="none";
     if(r.status==="success"){
       successMsg.style.display="block"; errorMsg.style.display="none";
-      const msg = `Olá! Acabei de agendar meu horário:%0AServiço: ${dados.servico}%0AData: ${dados.data}%0AHora: ${dados.hora}%0ANome: ${dados.nome}%0AWhatsApp: ${dados.telefone}`;
+      const msg=`Olá! Acabei de agendar meu horário:%0AServiço: ${dados.servico}%0AData: ${dados.data}%0AHora: ${dados.hora}%0ANome: ${dados.nome}%0AWhatsApp: ${dados.telefone}`;
       whatsappLink.href = `https://api.whatsapp.com/send?phone=5521996108265&text=${msg}`;
       form.reset(); horaSelect.innerHTML="<option value=''>Selecione um horário</option>"; servicoInfo.textContent='';
-      setTimeout(()=>{successMsg.style.display="none"},20000); // link WhatsApp visível 20s
     }else{ errorMsg.textContent=r.mensagem; errorMsg.style.display="block"; }
   }catch{ espera.style.display="none"; errorMsg.textContent="Erro ao conectar com a planilha."; errorMsg.style.display="block"; }
 });
-</script>
+  </script>
+  
