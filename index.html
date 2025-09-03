@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agendamento BDV</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #121212;
+  color: #fff;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+.container {
+  padding: 20px;
+  max-width: 400px;
+  margin: auto;
+}
+label {
+  display: block;
+  margin-top: 15px;
+  text-align: left;
+}
+input, select, button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 5px;
+  border: none;
+  font-size: 16px;
+}
+button {
+  background: #FFD700;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 20px;
+}
+.success {
+  background: #28a745;
+  color: #fff;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 5px;
+  display: none;
+}
+</style>
+</head>
+<body>
+
+<h1>Agende seu horário</h1>
+
+<div class="container">
+  <form id="form">
+    <label>Serviço:</label>
+    <select id="servico" required>
+      <option value="">Selecione</option>
+      <option value="Barba">Barba - R$20,00</option>
+      <option value="Cabelo (1 máquina)">Cabelo - R$30,00</option>
+      <option value="Sobrancelha">Sobrancelha - R$10,00</option>
+      <option value="Pezinho (contorno)">Pezinho - R$10,00</option>
+      <option value="Corte">Corte - R$35,00</option>
+      <option value="Combo (cabelo + barba + sobrancelha)">Combo</option>
+      <option value="Pigmentação">Pigmentação - R$15,00</option>
+      <option value="Corte + Pigmentação">Corte + Pigmentação - R$45,00</option>
+      <option value="Corte de Atípicos">Corte de Atípicos - R$50,00</option>
+    </select>
+
+    <label>Data:</label>
+    <input type="date" id="data" required>
+
+    <label>Hora:</label>
+    <select id="hora" required></select>
+
+    <label>Nome:</label>
+    <input type="text" id="nome" required>
+
+    <label>WhatsApp:</label>
+    <input type="tel" id="telefone" required>
+
+    <button type="submit">Agendar</button>
+  </form>
+
+  <div class="success" id="successMsg">Agendamento realizado com sucesso!</div>
+</div>
+
+<script>
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbw7bs4xLgdbk7bvbfc-eyspnPHv6SXax4mos4oJNyQ2QQnaUW2DlP_tly8AwwlyU56I/exec";
+const horasDisponiveis = ["09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00"];
+
+const dataInput = document.getElementById("data");
+const horaSelect = document.getElementById("hora");
+const form = document.getElementById("form");
+const successMsg = document.getElementById("successMsg");
+const servico = document.getElementById("servico");
+const nome = document.getElementById("nome");
+const telefone = document.getElementById("telefone");
+
+dataInput.addEventListener("change", async () => {
+  horaSelect.innerHTML = "<option value=''>Selecione</option>";
+  try {
+    const res = await fetch(SHEET_URL + "?action=getHorarios");
+    const ocupados = await res.json();
+    let diaHorarios = horasDisponiveis;
+    if (ocupados[dataInput.value]) {
+      diaHorarios = horasDisponiveis.filter(h => !ocupados[dataInput.value].includes(h));
+    }
+    diaHorarios.forEach(h => {
+      const option = document.createElement("option");
+      option.value = h;
+      option.textContent = h;
+      horaSelect.appendChild(option);
+    });
+  } catch {
+    alert("Erro ao buscar horários ocupados.");
+  }
+});
+
+form.addEventListener("submit", async e => {
+  e.preventDefault();
+  const dados = {
+    servico: servico.value,
+    data: dataInput.value,
+    hora: horaSelect.value,
+    nome: nome.value,
+    telefone: telefone.value
+  };
+  try {
+    const res = await fetch(SHEET_URL, { method:"POST", body:JSON.stringify(dados) });
+    const r = await res.json();
+    if(r.status==="success"){
+      successMsg.style.display="block";
+      form.reset();
+      horaSelect.innerHTML = "<option value=''>Selecione</option>";
+      setTimeout(()=>{successMsg.style.display="none"},3000);
+    } else {
+      alert(r.mensagem);
+    }
+  } catch {
+    alert("Erro ao conectar com a planilha.");
+  }
+});
+</script>
+
+</body>
+</html>
