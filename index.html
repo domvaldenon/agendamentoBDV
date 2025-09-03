@@ -5,126 +5,36 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Agendamento - Barbeiro Dom Valdenon</title>
 <style>
-body {
-  font-family: 'Arial', sans-serif;
-  margin: 0;
-  background: #121212;
-  color: #fff;
-}
-header {
-  background: #000;
-  padding: 20px;
-  text-align: center;
-  position: relative;
-}
-header img.logo {
-  max-width: 150px;
-  height: auto;
-  margin-bottom: 10px;
-}
-header h1 {
-  margin: 0;
-  font-size: 26px;
-  color: #FFD700;
-}
-.instagram {
-  position: absolute;
-  right: 20px;
-  top: 20px;
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  color: #fff;
-  font-weight: bold;
-  gap: 5px;
-  transition: 0.3s;
-}
-.instagram img {
-  width: 24px;
-  height: 24px;
-}
-.instagram:hover {
-  color: #FFD700;
-}
-.container {
-  max-width: 550px;
-  margin: 30px auto;
-  background: #1e1e1e;
-  padding: 25px;
-  border-radius: 20px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.6);
-}
-label {
-  display: block;
-  margin-top: 15px;
-  font-weight: bold;
-}
-input, select, button {
-  width: 100%;
-  padding: 14px;
-  margin-top: 5px;
-  border-radius: 10px;
-  border: none;
-  font-size: 16px;
-}
-select {
-  background: #2a2a2a;
-  color: #fff;
-}
-button {
-  background: #FFD700;
-  color: #000;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 20px;
-  transition: 0.3s;
-}
-button:hover {
-  background: #e6c200;
-}
-.success, .error {
-  padding: 14px;
-  margin-top: 15px;
-  border-radius: 10px;
-  text-align: center;
-  display: none;
-  font-weight: bold;
-}
-.success { background: #28a745; }
-.error { background: #dc3545; }
-.slots {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-  gap: 10px;
-  margin-top: 10px;
-}
-.slot {
-  padding: 12px 0;
-  background: #2a2a2a;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: 0.3s;
-  text-align: center;
-}
-.slot.available:hover {
-  background: #FFD700;
-  color: #000;
-}
-.slot.selected {
-  background: #FFD700;
-  color: #000;
-}
-.slot.booked {
-  background: #555;
-  color: #999;
-  cursor: not-allowed;
-}
-footer {
-  text-align: center;
-  margin: 30px 0 10px 0;
-  font-size: 14px;
-  color: #aaa;
-}
+body { font-family: Arial, sans-serif; margin:0; background:#121212; color:#fff; }
+header { background:#000; padding:20px; text-align:center; position:relative; }
+header img.logo { max-width:150px; height:auto; margin-bottom:10px; transition:.3s; }
+header img.logo:hover { transform:scale(1.05); }
+header h1 { margin:0; font-size:26px; color:#FFD700; }
+.instagram { position:absolute; right:20px; top:20px; display:flex; align-items:center; text-decoration:none; color:#fff; font-weight:bold; gap:5px; transition:.3s; }
+.instagram img { width:24px; height:24px; transition:.3s; }
+.instagram:hover { color:#FFD700; }
+.instagram:hover img { transform:scale(1.1); }
+.container { max-width:550px; margin:30px auto; background:#1e1e1e; padding:25px; border-radius:20px; box-shadow:0 6px 20px rgba(0,0,0,0.6); }
+label { display:block; margin-top:15px; font-weight:bold; }
+input, select, button { width:100%; padding:14px; margin-top:5px; border-radius:10px; border:none; font-size:16px; }
+select { background:#2a2a2a; color:#fff; }
+option:hover { background:#FFD700; color:#000; }
+button { background:#FFD700; color:#000; font-weight:bold; cursor:pointer; margin-top:20px; transition:.3s; }
+button:hover { background:#e6c200; }
+.success, .error { padding:14px; margin-top:15px; border-radius:10px; text-align:center; display:none; font-weight:bold; transition:.3s; }
+.success { background:#28a745; }
+.error { background:#dc3545; }
+.slots { display:grid; grid-template-columns:repeat(auto-fit,minmax(80px,1fr)); gap:10px; margin-top:10px; }
+.slot { padding:12px 0; background:#2a2a2a; border-radius:10px; cursor:pointer; transition:.3s; text-align:center; position:relative; }
+.slot.available:hover { background:#FFD700; color:#000; transform:scale(1.05); }
+.slot.selected { background:#FFD700; color:#000; transform:scale(1.05); box-shadow:0 0 10px #FFD700; }
+.slot.booked { background:#555; color:#999; cursor:not-allowed; }
+.slot.next { border:2px solid #FFD700; }
+.slot::after { content: attr(data-info); position:absolute; bottom:110%; left:50%; transform:translateX(-50%); background:#000; padding:5px 8px; border-radius:5px; font-size:12px; white-space:nowrap; opacity:0; pointer-events:none; transition:.3s; }
+.slot.available:hover::after { opacity:1; }
+#servico-info { margin-top:5px; font-size:14px; color:#FFD700; font-weight:bold; }
+footer { text-align:center; margin:30px 0 10px 0; font-size:14px; color:#aaa; }
+@media(max-width:500px){ .slots { grid-template-columns: repeat(auto-fit,minmax(60px,1fr)); } }
 </style>
 </head>
 <body>
@@ -142,18 +52,19 @@ footer {
     <label>Serviço:</label>
     <select id="servico" required>
       <option value="">Selecione</option>
-      <option value="Barba" data-duracao="30">Barba - R$20,00</option>
-      <option value="Cabelo (1 máquina)" data-duracao="20">Cabelo (1 máquina) - R$20,00</option>
-      <option value="Corte" data-duracao="40">Corte - R$35,00</option>
-      <option value="Pezinho (contorno)" data-duracao="10">Pezinho (contorno) - R$10,00</option>
-      <option value="Combo" data-duracao="60">Combo - R$50,00</option>
-      <option value="Pigmentação" data-duracao="20">Pigmentação - R$15,00</option>
-      <option value="Corte + Pigmentação" data-duracao="60">Corte + Pigmentação - R$45,00</option>
-      <option value="Corte de Atípicos" data-duracao="60">Corte de Atípicos - R$50,00</option>
+      <option value="Barba" data-duracao="30" data-preco="20">Barba - R$20,00</option>
+      <option value="Cabelo (1 máquina)" data-duracao="20" data-preco="20">Cabelo (1 máquina) - R$20,00</option>
+      <option value="Corte" data-duracao="40" data-preco="35">Corte - R$35,00</option>
+      <option value="Pezinho (contorno)" data-duracao="10" data-preco="10">Pezinho (contorno) - R$10,00</option>
+      <option value="Combo" data-duracao="60" data-preco="50">Combo - R$50,00</option>
+      <option value="Pigmentação" data-duracao="20" data-preco="15">Pigmentação - R$15,00</option>
+      <option value="Corte + Pigmentação" data-duracao="60" data-preco="45">Corte + Pigmentação - R$45,00</option>
+      <option value="Corte de Atípicos" data-duracao="60" data-preco="50">Corte de Atípicos - R$50,00</option>
     </select>
+    <div id="servico-info"></div>
 
     <label>Data:</label>
-    <input type="date" id="data" required min="<?= (new Date()).toISOString().split('T')[0] ?>">
+    <input type="date" id="data" required>
 
     <label>Horário:</label>
     <div id="slots" class="slots"></div>
@@ -171,128 +82,90 @@ footer {
   <div class="error" id="errorMsg">Erro ao realizar o agendamento!</div>
 </div>
 
-<footer>
-  &copy; 2025 Barbeiro Dom Valdenon | Todos os direitos reservados
-</footer>
+<footer>&copy; 2025 Barbeiro Dom Valdenon | Todos os direitos reservados</footer>
 
 <script>
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbzgpP3CQDJ9XMgc8S1rDYX9qtt92j1b_tVLWYfmBSwTYAzE1EksiCrgEDxzbc_tXG-kjA/exec";
-
 const servico = document.getElementById("servico");
 const dataInput = document.getElementById("data");
 const slotsDiv = document.getElementById("slots");
 const form = document.getElementById("form");
 const successMsg = document.getElementById("successMsg");
 const errorMsg = document.getElementById("errorMsg");
-
+const servicoInfo = document.getElementById("servico-info");
 let selectedSlot = null;
 
-function gerarSlots(duracao) {
+servico.addEventListener("change", () => {
+  if (servico.value) {
+    const option = servico.selectedOptions[0];
+    servicoInfo.textContent = `Duração: ${option.dataset.duracao} min | Preço: R$${option.dataset.preco}`;
+  } else { servicoInfo.textContent = ''; }
+  atualizarSlots();
+});
+
+function gerarSlots(duracao){
   const slots = [];
-  const start = 9*60;  
-  const end = 20*60 + 30; 
-  const dur = parseInt(duracao);
-
-  for (let t = start; t <= end - dur; t += 10) {
-    if ((t >= 12*60) && (t < 13*60)) continue;
-
-    const h = Math.floor(t/60).toString().padStart(2,'0');
-    const m = (t%60).toString().padStart(2,'0');
+  const start = 9*60; const end = 20*60+30; const dur=parseInt(duracao);
+  for(let t=start;t<=end-dur;t+=10){
+    if(t>=12*60 && t<13*60) continue;
+    const h=Math.floor(t/60).toString().padStart(2,'0');
+    const m=(t%60).toString().padStart(2,'0');
     slots.push(`${h}:${m}`);
   }
   return slots;
 }
 
-async function atualizarSlots() {
-  slotsDiv.innerHTML = '';
-  selectedSlot = null;
-  if (!dataInput.value || !servico.value) return;
-
+async function atualizarSlots(){
+  slotsDiv.innerHTML=''; selectedSlot=null;
+  if(!dataInput.value || !servico.value) return;
   const duracao = servico.selectedOptions[0].dataset.duracao;
   let horarios = gerarSlots(duracao);
-
-  try {
-    const res = await fetch(SHEET_URL + "?action=getHorarios");
+  try{
+    const res = await fetch(SHEET_URL+"?action=getHorarios");
     const ocupados = await res.json();
-    if (ocupados[dataInput.value]) {
-      horarios = horarios.filter(h => !ocupados[dataInput.value].some(o => {
-        const [oh, om] = o.split(":").map(Number);
-        const [hh, mm] = h.split(":").map(Number);
-        const inicio = hh*60 + mm;
-        const fim = inicio + parseInt(duracao);
-        const ocupInicio = oh*60 + om;
-        const ocupFim = ocupInicio + 30; 
-        return (inicio < ocupFim && fim > ocupInicio);
+    if(ocupados[dataInput.value]){
+      horarios = horarios.filter(h=>!ocupados[dataInput.value].some(o=>{
+        const [oh,om]=o.split(":").map(Number);
+        const [hh,mm]=h.split(":").map(Number);
+        const inicio=hh*60+mm; const fim=inicio+parseInt(duracao);
+        const ocupInicio=oh*60+om; const ocupFim=ocupInicio+30;
+        return (inicio<ocupFim && fim>ocupInicio);
       }));
     }
-
-    // Disponíveis
-    horarios.forEach(h => {
-      const div = document.createElement('div');
-      div.classList.add('slot','available');
-      div.textContent = h;
-      div.addEventListener('click', () => {
-        document.querySelectorAll('.slot.selected').forEach(s => s.classList.remove('selected'));
-        div.classList.add('selected');
-        selectedSlot = h;
+    const now = new Date(); const today=dataInput.value===now.toISOString().split('T')[0];
+    let firstAvailable=null;
+    horarios.forEach(h=>{ if(!firstAvailable && (!today || h>now.toTimeString().slice(0,5))) firstAvailable=h; });
+    horarios.forEach(h=>{
+      const div=document.createElement('div'); div.classList.add('slot','available'); div.textContent=h;
+      const option=servico.selectedOptions[0];
+      div.setAttribute('data-info',`Duração: ${option.dataset.duracao} min | Preço: R$${option.dataset.preco}`);
+      if(h===firstAvailable) div.classList.add('next');
+      div.addEventListener('click',()=>{
+        document.querySelectorAll('.slot.selected').forEach(s=>s.classList.remove('selected'));
+        div.classList.add('selected'); selectedSlot=h;
       });
       slotsDiv.appendChild(div);
     });
-
-    // Ocupados
-    const allPossible = gerarSlots(duracao);
-    allPossible.forEach(h => {
-      if (!horarios.includes(h)) {
-        const div = document.createElement('div');
-        div.classList.add('slot','booked');
-        div.textContent = h;
-        slotsDiv.appendChild(div);
-      }
-    });
-
-  } catch {
-    alert("Erro ao buscar horários ocupados.");
-  }
+    const allSlots = gerarSlots(duracao);
+    allSlots.forEach(h=>{ if(!horarios.includes(h)){ const div=document.createElement('div'); div.classList.add('slot','booked'); div.textContent=h; slotsDiv.appendChild(div); } });
+  }catch{ alert("Erro ao buscar horários ocupados."); }
 }
 
-servico.addEventListener("change", atualizarSlots);
 dataInput.addEventListener("change", atualizarSlots);
 
-form.addEventListener("submit", async e => {
+form.addEventListener("submit", async e=>{
   e.preventDefault();
-  if (!selectedSlot) {
-    errorMsg.textContent = "Selecione um horário!";
-    errorMsg.style.display = "block";
-    return;
-  }
-  const dados = {
-    servico: servico.value,
-    data: dataInput.value,
-    hora: selectedSlot,
-    nome: document.getElementById("nome").value,
-    telefone: document.getElementById("telefone").value
-  };
-  try {
-    const res = await fetch(SHEET_URL, { method:"POST", body:JSON.stringify(dados) });
-    const r = await res.json();
+  if(!selectedSlot){ errorMsg.textContent="Selecione um horário!"; errorMsg.style.display="block"; return; }
+  const dados={ servico: servico.value, data: dataInput.value, hora:selectedSlot, nome:document.getElementById("nome").value, telefone:document.getElementById("telefone").value };
+  try{
+    const res=await fetch(SHEET_URL,{method:"POST",body:JSON.stringify(dados)});
+    const r=await res.json();
     if(r.status==="success"){
-      successMsg.style.display="block";
-      errorMsg.style.display="none";
-      form.reset();
-      slotsDiv.innerHTML = '';
-      selectedSlot = null;
+      successMsg.style.display="block"; errorMsg.style.display="none"; form.reset(); slotsDiv.innerHTML=''; selectedSlot=null; servicoInfo.textContent='';
       setTimeout(()=>{successMsg.style.display="none"},3000);
-    } else {
-      errorMsg.textContent = r.mensagem;
-      errorMsg.style.display="block";
-    }
-  } catch {
-    errorMsg.textContent = "Erro ao conectar com a planilha.";
-    errorMsg.style.display="block";
-  }
+    }else{ errorMsg.textContent=r.mensagem; errorMsg.style.display="block"; }
+  }catch{ errorMsg.textContent="Erro ao conectar com a planilha."; errorMsg.style.display="block"; }
 });
 </script>
-
 </body>
-      </html>
-      
+</html>
