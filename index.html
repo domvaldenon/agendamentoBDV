@@ -5,65 +5,58 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Agendamento Premium - Barbeiro Dom Valdenon</title>
 <style>
-/* Reset e base */
 body { font-family: Arial, sans-serif; margin:0; background:#121212; color:#fff; }
 header { background:#000; padding:20px; text-align:center; position:relative; }
-header img.logo { max-width:150px; height:auto; margin-bottom:10px; transition:.3s; }
+header .logo-wrapper { display:inline-block; border-radius:50%; overflow:hidden; width:120px; height:120px; margin-bottom:10px; box-shadow:0 5px 15px rgba(0,0,0,0.5); }
+header img.logo { width:100%; height:100%; object-fit:cover; transition:.3s; }
 header img.logo:hover { transform:scale(1.05); }
 header h1 { margin:0; font-size:28px; color:#FFD700; letter-spacing:1px; }
 
-/* Instagram */
-.instagram { position:absolute; right:20px; top:20px; display:flex; align-items:center; text-decoration:none; color:#fff; font-weight:bold; gap:5px; transition:.3s; }
-.instagram img { width:24px; height:24px; transition:.3s; }
-.instagram:hover { color:#FFD700; }
-.instagram:hover img { transform:scale(1.1); }
-
-/* Container do formulário */
 .container { max-width:600px; margin:40px auto; background:#1e1e1e; padding:30px; border-radius:25px; box-shadow:0 10px 30px rgba(0,0,0,0.7); }
 
-/* Formulário */
 label { display:block; margin-top:15px; font-weight:bold; font-size:16px; }
 input, select, button { width:100%; padding:14px; margin-top:5px; border-radius:10px; border:none; font-size:16px; }
 select { background:#2a2a2a; color:#fff; }
 option:hover { background:#FFD700; color:#000; }
-button { background:#FFD700; color:#000; font-weight:bold; cursor:pointer; margin-top:20px; transition:.3s; }
+button { background:#FFD700; color:#000; font-weight:bold; cursor:pointer; margin-top:10px; transition:.3s; }
 button:hover { background:#e6c200; }
 
-/* Mensagens */
 .success, .error { padding:14px; margin-top:15px; border-radius:10px; text-align:center; display:none; font-weight:bold; transition:.3s; }
 .success { background:#28a745; }
 .error { background:#dc3545; }
 
-/* Slots */
 .slots { display:grid; grid-template-columns:repeat(auto-fit,minmax(80px,1fr)); gap:10px; margin-top:10px; }
-.slot { padding:14px 0; background:#2a2a2a; border-radius:12px; cursor:pointer; transition:.3s; text-align:center; position:relative; font-weight:bold; }
-.slot.available:hover { background:#FFD700; color:#000; transform:scale(1.05); }
-.slot.selected { background:#FFD700; color:#000; transform:scale(1.05); box-shadow:0 0 15px #FFD700; }
+.slot { padding:14px 0; border-radius:12px; cursor:pointer; transition:.3s; text-align:center; font-weight:bold; position:relative; background:#2a2a2a; color:#fff; }
+.slot.available:hover { animation: glow 1s infinite alternate; }
+.slot.selected { background:#FFD700; color:#000; box-shadow:0 0 20px #FFD700; transform:scale(1.05); }
 .slot.booked { background:#555; color:#999; cursor:not-allowed; }
-.slot.next { border:2px solid #FFD700; }
+.slot.next { border:2px solid #FFD700; animation: pulse 1.5s infinite; }
 
-/* Tooltip */
+@keyframes glow { 0% { background:#FFD700; color:#000; box-shadow:0 0 5px #FFD700; } 100% { background:#fff200; color:#000; box-shadow:0 0 15px #FFD700; } }
+@keyframes pulse { 0% { box-shadow:0 0 5px #FFD700; } 50% { box-shadow:0 0 20px #FFD700; } 100% { box-shadow:0 0 5px #FFD700; } }
+
 .slot::after { content: attr(data-info); position:absolute; bottom:110%; left:50%; transform:translateX(-50%); background:#000; padding:6px 10px; border-radius:6px; font-size:13px; white-space:nowrap; opacity:0; pointer-events:none; transition:.3s; }
 .slot.available:hover::after { opacity:1; }
 
-/* Info serviço */
 #servico-info { margin-top:5px; font-size:14px; color:#FFD700; font-weight:bold; }
 
-/* Footer */
+#instagram-link { display:block; text-align:center; margin-top:15px; text-decoration:none; color:#fff; font-weight:bold; transition:.3s; }
+#instagram-link img { width:24px; height:24px; vertical-align:middle; margin-right:6px; }
+#instagram-link:hover { color:#FFD700; }
+#instagram-link:hover img { transform:scale(1.1); }
+
 footer { text-align:center; margin:30px 0 10px 0; font-size:14px; color:#aaa; }
 
-/* Responsividade */
 @media(max-width:500px){ .slots { grid-template-columns: repeat(auto-fit,minmax(60px,1fr)); } }
 </style>
 </head>
 <body>
 
 <header>
-  <img src="logo.png" alt="Logo BDV" class="logo">
+  <div class="logo-wrapper">
+    <img src="logo.png" alt="Logo BDV" class="logo">
+  </div>
   <h1>Barbeiro Dom Valdenon</h1>
-  <a href="https://www.instagram.com/barbeirodomvaldenon" target="_blank" class="instagram">
-    <img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" alt="Instagram"> Siga no Instagram
-  </a>
 </header>
 
 <div class="container">
@@ -97,7 +90,12 @@ footer { text-align:center; margin:30px 0 10px 0; font-size:14px; color:#aaa; }
     <button type="submit">Agendar</button>
   </form>
 
-  <div class="success" id="successMsg">Agendamento realizado com sucesso!</div>
+  <div class="success" id="successMsg">Agendamento realizado com sucesso!
+    <a href="https://www.instagram.com/barbeirodomvaldenon" target="_blank" id="instagram-link">
+      <img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" alt="Instagram"> Siga no Instagram
+    </a>
+  </div>
+
   <div class="error" id="errorMsg">Erro ao realizar o agendamento!</div>
 </div>
 
@@ -114,7 +112,6 @@ const errorMsg = document.getElementById("errorMsg");
 const servicoInfo = document.getElementById("servico-info");
 let selectedSlot = null;
 
-// Atualiza info de serviço e slots
 servico.addEventListener("change", () => {
   if (servico.value) {
     const option = servico.selectedOptions[0];
@@ -123,7 +120,6 @@ servico.addEventListener("change", () => {
   atualizarSlots();
 });
 
-// Gera horários disponíveis
 function gerarSlots(duracao){
   const slots = [];
   const start = 9*60;
@@ -132,19 +128,15 @@ function gerarSlots(duracao){
   const now = new Date();
   const today = dataInput.value === now.toISOString().split('T')[0];
   for(let t=start; t<=end-dur; t+=10){
-    if(t>=12*60 && t<13*60) continue; // intervalo almoço
+    if(t>=12*60 && t<13*60) continue;
     const h = Math.floor(t/60).toString().padStart(2,'0');
     const m = (t%60).toString().padStart(2,'0');
-    const slotTime = `${h}:${m}`;
-    if(today){
-      if(h<now.getHours() || (h==now.getHours() && m<=now.getMinutes())) continue;
-    }
-    slots.push(slotTime);
+    if(today && (parseInt(h)<now.getHours() || (parseInt(h)==now.getHours() && parseInt(m)<=now.getMinutes()))) continue;
+    slots.push(`${h}:${m}`);
   }
   return slots;
 }
 
-// Atualiza slots no formulário
 async function atualizarSlots(){
   slotsDiv.innerHTML=''; selectedSlot=null;
   if(!dataInput.value || !servico.value) return;
@@ -176,7 +168,6 @@ async function atualizarSlots(){
       });
       slotsDiv.appendChild(div);
     });
-
     const allSlots = gerarSlots(duracao);
     allSlots.forEach(h=>{
       if(!horarios.includes(h)){
@@ -186,13 +177,11 @@ async function atualizarSlots(){
         slotsDiv.appendChild(div);
       }
     });
-
   }catch{ alert("Erro ao buscar horários ocupados."); }
 }
 
 dataInput.addEventListener("change", atualizarSlots);
 
-// Envio do formulário
 form.addEventListener("submit", async e=>{
   e.preventDefault();
   if(!selectedSlot){ errorMsg.textContent="Selecione um horário!"; errorMsg.style.display="block"; return; }
@@ -203,10 +192,11 @@ form.addEventListener("submit", async e=>{
     if(r.status==="success"){
       successMsg.style.display="block"; errorMsg.style.display="none"; 
       form.reset(); slotsDiv.innerHTML=''; selectedSlot=null; servicoInfo.textContent='';
-      setTimeout(()=>{successMsg.style.display="none"},3000);
+      setTimeout(()=>{successMsg.style.display="none"},5000);
     }else{ errorMsg.textContent=r.mensagem; errorMsg.style.display="block"; }
   }catch{ errorMsg.textContent="Erro ao conectar com a planilha."; errorMsg.style.display="block"; }
 });
 </script>
 </body>
-</html>
+      </html>
+  
