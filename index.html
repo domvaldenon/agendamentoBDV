@@ -6,119 +6,118 @@
   <title>Agendamento - BARBEIRO DOM VALDENON</title>
   <style>
     body {
-      font-family: 'Arial', sans-serif;
-      background-color: #121212;
+      font-family: Arial, sans-serif;
+      background: #121212;
       color: #fff;
+      text-align: center;
       margin: 0;
       padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-    header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    header img {
-      width: 150px;
-    }
-    h1 {
-      font-size: 2rem;
-      margin: 0;
     }
     .container {
-      background-color: #1e1e1e;
       padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      width: 100%;
       max-width: 400px;
+      margin: auto;
+    }
+    img {
+      max-width: 120px;
+      display: block;
+      margin: 20px auto;
+    }
+    h1 {
+      margin-bottom: 20px;
+      color: #FFD700;
     }
     label {
       display: block;
-      margin-bottom: 8px;
+      margin-top: 15px;
+      text-align: left;
       font-weight: bold;
     }
     input, select, button {
       width: 100%;
       padding: 10px;
-      margin-bottom: 15px;
-      border: 1px solid #444;
-      border-radius: 4px;
-      background-color: #333;
-      color: #fff;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
     }
     button {
-      background-color: #FFD700;
+      background: #FFD700;
       color: #000;
       font-weight: bold;
       cursor: pointer;
+      margin-top: 20px;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #e6c200;
     }
     .success {
-      background-color: #28a745;
+      background: #28a745;
       color: #fff;
       padding: 10px;
-      border-radius: 4px;
-      text-align: center;
+      margin-top: 10px;
+      border-radius: 5px;
       display: none;
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <img src="https://drive.google.com/file/d/1w4EA_qjXjsj8me4-D2Nzr-OANRjso8Rb/preview" alt="Logo BARBEIRO DOM VALDENON">
-    <h1>Agende seu horário</h1>
-  </header>
+  <!-- Logo -->
+  <img src="https://drive.google.com/uc?export=view&id=1w4EA_qjXjsj8me4-D2Nzr-OANRjso8Rb" 
+       alt="Logo BARBEIRO DOM VALDENON">
+
+  <h1>Agende seu horário</h1>
 
   <div class="container">
     <form id="form">
-      <label for="servico">Serviço:</label>
+      <label>Serviço:</label>
       <select id="servico" required>
         <option value="">Selecione</option>
         <option value="Barba">Barba - R$20,00</option>
-        <option value="Cabelo (1 máquina)">Cabelo - R$30,00</option>
+        <option value="Cabelo (1 máquina)">Cabelo (1 máquina) - R$30,00</option>
         <option value="Sobrancelha">Sobrancelha - R$10,00</option>
         <option value="Pezinho (contorno)">Pezinho - R$10,00</option>
         <option value="Corte">Corte - R$35,00</option>
-        <option value="Combo (cabelo + barba + sobrancelha)">Combo</option>
+        <option value="Combo">Combo (cabelo + barba + sobrancelha)</option>
         <option value="Pigmentação">Pigmentação - R$15,00</option>
         <option value="Corte + Pigmentação">Corte + Pigmentação - R$45,00</option>
         <option value="Corte de Atípicos">Corte de Atípicos - R$50,00</option>
       </select>
 
-      <label for="data">Data:</label>
+      <label>Data:</label>
       <input type="date" id="data" required>
 
-      <label for="hora">Hora:</label>
+      <label>Hora:</label>
       <select id="hora" required></select>
 
-      <label for="nome">Nome:</label>
+      <label>Nome:</label>
       <input type="text" id="nome" required>
 
-      <label for="telefone">WhatsApp:</label>
-      <input type="tel" id="telefone" required>
+      <label>WhatsApp:</label>
+      <input type="tel" id="telefone" required placeholder="(DDD) 99999-9999">
 
       <button type="submit">Agendar</button>
     </form>
 
-    <div class="success" id="successMsg">Agendamento realizado com sucesso!</div>
+    <div class="success" id="successMsg">✅ Agendamento realizado com sucesso!</div>
   </div>
 
   <script>
-    const SHEET_URL = "https://script.google.com/macros/s/AKfycbzgpP3CQDJ9XMgc8S1rDYX9qtt92j1b_tVLWYfmBSwTYAzE1EksiCrgEDxzbc_tXG-kjA/exec";
-    const horasDisponiveis = ["09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00"];
+    const SHEET_URL = "https://script.google.com/macros/s/AKfycbzgpP3CQDJ9XMgc8S1rDYX9qtt92j1b_tVLWYfmBSwTYAzE1EksiCrgEDxzbc_tXG-kjA/exec"; 
+    const horasDisponiveis = [
+      "09:00","09:30","10:00","10:30","11:00","11:30",
+      "12:00","12:30","13:00","13:30","14:00","14:30",
+      "15:00","15:30","16:00","16:30","17:00","17:30","18:00"
+    ];
 
     const dataInput = document.getElementById("data");
     const horaSelect = document.getElementById("hora");
     const form = document.getElementById("form");
     const successMsg = document.getElementById("successMsg");
-    const servico = document.getElementById("servico");
-    const nome = document.getElementById("nome");
-    const telefone = document.getElementById("telefone");
 
+    // Carrega horários disponíveis
     dataInput.addEventListener("change", async () => {
       horaSelect.innerHTML = "<option value=''>Selecione</option>";
       try {
@@ -139,6 +138,7 @@
       }
     });
 
+    // Envia agendamento
     form.addEventListener("submit", async e => {
       e.preventDefault();
       const dados = {
@@ -164,6 +164,5 @@
       }
     });
   </script>
-
 </body>
 </html>
