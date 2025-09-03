@@ -5,55 +5,52 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Agendamento Premium - Barbeiro Dom Valdenon</title>
 <style>
-/* ====== Layout Base ====== */
 body { font-family: Arial, sans-serif; margin:0; background:#121212; color:#fff; }
-header { background:#000; padding:20px; text-align:center; }
-header .logo-wrapper { display:inline-block; border-radius:50%; overflow:hidden; width:120px; height:120px; margin-bottom:10px; box-shadow:0 5px 15px rgba(0,0,0,0.5); transition:.3s; }
-header .logo-wrapper:hover { transform:scale(1.05); }
+header { background:#000; padding:15px 0; text-align:center; }
+header .logo-wrapper { display:inline-block; border-radius:50%; overflow:hidden; width:100px; height:100px; margin-bottom:8px; box-shadow:0 5px 15px rgba(0,0,0,0.5); }
 header img.logo { width:100%; height:100%; object-fit:cover; }
-header h1 { margin:0; font-size:30px; color:#FFD700; letter-spacing:1px; }
+header h1 { margin:0; font-size:26px; color:#FFD700; letter-spacing:1px; }
 
 /* ====== Container ====== */
-.container { max-width:650px; margin:40px auto; background:#1e1e1e; padding:35px; border-radius:25px; box-shadow:0 10px 30px rgba(0,0,0,0.7); }
+.container { max-width:580px; margin:20px auto; background:#1e1e1e; padding:25px; border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,0.7); }
 
 /* ====== Form ====== */
-label { display:block; margin-top:15px; font-weight:bold; font-size:16px; }
-input, select, button { width:100%; padding:15px; margin-top:5px; border-radius:12px; border:none; font-size:16px; }
+label { display:block; margin-top:12px; font-weight:bold; font-size:15px; }
+input, select, button { width:100%; padding:12px; margin-top:4px; border-radius:8px; border:none; font-size:15px; }
 select { background:#2a2a2a; color:#fff; }
 option:hover { background:#FFD700; color:#000; }
 button { background:#FFD700; color:#000; font-weight:bold; cursor:pointer; margin-top:10px; transition:.3s; }
 button:hover { background:#e6c200; transform:scale(1.02); }
 
 /* ====== Mensagens ====== */
-.success, .error { padding:14px; margin-top:15px; border-radius:10px; text-align:center; display:none; font-weight:bold; transition:.3s; }
+.success, .error { padding:12px; margin-top:12px; border-radius:8px; text-align:center; display:none; font-weight:bold; transition:.3s; }
 .success { background:#28a745; }
 .error { background:#dc3545; }
 
 /* ====== Slots ====== */
-.slots { display:grid; grid-template-columns:repeat(auto-fit,minmax(80px,1fr)); gap:12px; margin-top:15px; }
-.slot { padding:15px 0; border-radius:15px; cursor:pointer; transition:.3s; text-align:center; font-weight:bold; position:relative; background:#2a2a2a; color:#fff; }
+.slots { display:grid; grid-template-columns:repeat(auto-fit,minmax(60px,1fr)); gap:8px; margin-top:10px; }
+.slot { padding:8px 0; border-radius:10px; cursor:pointer; transition:.3s; text-align:center; font-weight:bold; position:relative; background:#2a2a2a; color:#fff; font-size:14px; }
 .slot.available:hover { animation: glow 1s infinite alternate; }
-.slot.selected { background:#FFD700; color:#000; box-shadow:0 0 25px #FFD700; transform:scale(1.05); }
+.slot.selected { background:#FFD700; color:#000; box-shadow:0 0 18px #FFD700; transform:scale(1.05); }
 .slot.booked { background:#555; color:#999; cursor:not-allowed; }
-.slot.next { border:3px solid #FFD700; animation: pulse 1.5s infinite; }
+.slot.next { border:2px solid #FFD700; animation: pulse 1.5s infinite; }
 
-/* ====== Animações ====== */
-@keyframes glow { 0% { background:#FFD700; color:#000; box-shadow:0 0 5px #FFD700; } 100% { background:#fff200; color:#000; box-shadow:0 0 20px #FFD700; } }
-@keyframes pulse { 0% { box-shadow:0 0 10px #FFD700; } 50% { box-shadow:0 0 25px #FFD700; } 100% { box-shadow:0 0 10px #FFD700; } }
+@keyframes glow { 0% { background:#FFD700; color:#000; box-shadow:0 0 4px #FFD700; } 100% { background:#fff200; color:#000; box-shadow:0 0 10px #FFD700; } }
+@keyframes pulse { 0% { box-shadow:0 0 6px #FFD700; } 50% { box-shadow:0 0 15px #FFD700; } 100% { box-shadow:0 0 6px #FFD700; } }
 
-.slot::after { content: attr(data-info); position:absolute; bottom:120%; left:50%; transform:translateX(-50%); background:#000; padding:6px 10px; border-radius:6px; font-size:13px; white-space:nowrap; opacity:0; pointer-events:none; transition:.3s; }
+.slot::after { content: attr(data-info); position:absolute; bottom:120%; left:50%; transform:translateX(-50%); background:#000; padding:5px 8px; border-radius:6px; font-size:12px; white-space:nowrap; opacity:0; pointer-events:none; transition:.3s; }
 .slot.available:hover::after { opacity:1; }
 
-#servico-info { margin-top:6px; font-size:14px; color:#FFD700; font-weight:bold; }
+#servico-info { margin-top:4px; font-size:13px; color:#FFD700; font-weight:bold; }
 
-#instagram-link { display:block; text-align:center; margin-top:15px; text-decoration:none; color:#fff; font-weight:bold; transition:.3s; }
-#instagram-link img { width:24px; height:24px; vertical-align:middle; margin-right:6px; }
+#instagram-link { display:block; text-align:center; margin-top:12px; text-decoration:none; color:#fff; font-weight:bold; transition:.3s; }
+#instagram-link img { width:22px; height:22px; vertical-align:middle; margin-right:6px; }
 #instagram-link:hover { color:#FFD700; }
-#instagram-link:hover img { transform:scale(1.2); }
+#instagram-link:hover img { transform:scale(1.1); }
 
-footer { text-align:center; margin:30px 0 10px 0; font-size:14px; color:#aaa; }
+footer { text-align:center; margin:20px 0 10px 0; font-size:13px; color:#aaa; }
 
-@media(max-width:500px){ .slots { grid-template-columns: repeat(auto-fit,minmax(60px,1fr)); } }
+@media(max-width:500px){ .slots { grid-template-columns: repeat(auto-fit,minmax(50px,1fr)); } }
 </style>
 </head>
 <body>
@@ -73,7 +70,7 @@ footer { text-align:center; margin:30px 0 10px 0; font-size:14px; color:#aaa; }
       <option value="Barba" data-duracao="30" data-preco="20">Barba - R$20,00</option>
       <option value="Cabelo (1 máquina)" data-duracao="20" data-preco="30">Cabelo (1 máquina) - R$30,00</option>
       <option value="Corte" data-duracao="40" data-preco="35">Corte - R$35,00</option>
-      <option value="Pezinho (contorno)" data-duracao="10" data-preco="10">Pezinho - R$10,00</option>
+      <option value="Pezinho (contorno)" data-duracao="10" data-preco="10">Pezinho (contorno) - R$10,00</option>
       <option value="Combo" data-duracao="60" data-preco="50">Combo - R$50,00</option>
       <option value="Pigmentação" data-duracao="20" data-preco="15">Pigmentação - R$15,00</option>
       <option value="Corte + Pigmentação" data-duracao="60" data-preco="45">Corte + Pigmentação - R$45,00</option>
@@ -128,6 +125,7 @@ servico.addEventListener("change", () => {
   atualizarSlots();
 });
 
+// ====== Gerar Slots ======
 function gerarSlots(duracao){
   const slots = [];
   const start = 9*60;
@@ -145,6 +143,7 @@ function gerarSlots(duracao){
   return slots;
 }
 
+// ====== Atualizar Slots ======
 async function atualizarSlots(){
   slotsDiv.innerHTML=''; selectedSlot=null;
   if(!dataInput.value || !servico.value) return;
@@ -197,5 +196,4 @@ form.addEventListener("submit", async e=>{
 });
 </script>
 </body>
-    </html>
-  
+</html>
